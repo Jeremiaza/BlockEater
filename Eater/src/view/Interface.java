@@ -1,6 +1,8 @@
+package view;
 
 import java.util.*;
 
+import controller.Controller;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -11,18 +13,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Food;
+import model.Worm;
 
 import static java.lang.Integer.parseInt;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 public class Interface extends Application {
     private int k = 0;
+    private final int leveys = 800;
+    private final int korkeus = 600;
     public void setK(int k) {
         this.k = k;
     }
     private ArrayList<Food> foods = new ArrayList<>();
     public void start(Stage stage) {
-        final int leveys = 800;
-        final int korkeus = 800;
         stage.setTitle("Random Walking");
         Text textfieldxy = new Text();
         Text textfield = new Text();
@@ -38,23 +45,23 @@ public class Interface extends Application {
         Canvas canvas = new Canvas(leveys, korkeus);
         root.getChildren().add(canvas);
         root.getChildren().add(hb);
-
+        
         GraphicsContext drawer = canvas.getGraphicsContext2D();
-
-        Worm worm = new Worm(200, 200);
+        
+        Controller controller = new Controller();
+        foods = controller.createBlocks(k, leveys, korkeus);
+        Worm worm = controller.createWorm(leveys, korkeus);
         drawer.setFill(Color.BLACK);
         drawer.fillRect(0, 0, leveys, korkeus);
         Random r = new Random();
-        int a = 0;
-        while (a<k) {
-            foods.add(new Food(r.nextInt(worm.getWidth()), r.nextInt(worm.getHeight())));
-            drawer.setFill(Color.color(Math.random(), Math.random(), Math.random()));
-            drawer.fillRect(foods.get(a).getX()*4,foods.get(a).getY()*4,4,4);
-            a++;
+        for (int i = 0; i<foods.size(); i++) {
+        	drawer.setFill(Color.color(Math.random(), Math.random(), Math.random()));
+            drawer.fillRect(foods.get(i).getX()*4,foods.get(i).getY()*4,4,4);
         }
+        
         new AnimationTimer() {
 
-            private long sleepNanoseconds = 10 * 1000000;
+            private long sleepNanoseconds = 1000 * 1000000;
             private long prevTime = 0;
 
             public void handle(long currentNanoTime) {
@@ -95,6 +102,7 @@ public class Interface extends Application {
                 } catch (IndexOutOfBoundsException e) {
                     textfield.setFill(Color.GREEN);
                     textfield.setText("You are win");
+                    stop();
                 }
 
                 prevTime = currentNanoTime;

@@ -1,3 +1,4 @@
+package view;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.Observable;
@@ -18,7 +19,6 @@ import javafx.stage.Stage;
 import static java.lang.Integer.parseInt;
 
 public class Launcher extends Application {
-    private int k = 0;
     public static void main(String[] args) {
         launch(args);
     }
@@ -43,7 +43,7 @@ public class Launcher extends Application {
         button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                k = parseInt(howmany.getText());
+                int k = parseInt(howmany.getText());
                 UI.setK(k);
                 UI.start(new Stage());
             }

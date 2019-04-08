@@ -1,10 +1,15 @@
+package model;
 
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.*;
 
 public class Worm {
     private HashMap<Integer, HashMap<Integer, Double>> coordinates;
-    private int locationX;
-    private int locationY;
+    int locationX;
+    int locationY;
     private int width;
     private int height;
     public Worm(int width, int height) {
@@ -102,6 +107,50 @@ public class Worm {
         }
         this.coordinates.get(this.locationX).put(this.locationY, 1.0);
     }
+    
+    public void manualWalk() {
+    	System.out.println("you called");
+    	KeyListener listener = new KeyListener() { 
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("keytyped");
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode()==87) { // W
+					System.out.println("w painettu");
+					setLocationY(getLocationY()+1);
+					getCoordinates().get(getLocationX()).put(getLocationY()+1, 1.0);
+				}
+				if (e.getKeyCode()==65) { // A
+					setLocationX(getLocationX()-1);
+					getCoordinates().get(getLocationX()-1).put(getLocationY(), 1.0);
+				}
+				if (e.getKeyCode()==83) { // S
+					setLocationY(getLocationY()-1);
+					getCoordinates().get(getLocationX()).put(getLocationY()-1, 1.0);
+					
+				}
+				if (e.getKeyCode()==68) { // D
+					setLocationX(getLocationX()+1);
+					getCoordinates().get(getLocationX()+1).put(getLocationY(), 1.0);
+				}
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				System.out.println("keyreleased");
+				// TODO Auto-generated method stub
+				
+			}
+    		
+    	};
+    	
+    }
 
     public HashMap<Integer, HashMap<Integer, Double>> getCoordinates() {
         return coordinates;
@@ -122,4 +171,11 @@ public class Worm {
     public int getLocationY() {
         return locationY;
     }
+    public void setLocationX(int x) {
+    	this.locationX=x;
+    }
+    public void setLocationY(int y) {
+    	this.locationY=y;
+    }
+    
 }
